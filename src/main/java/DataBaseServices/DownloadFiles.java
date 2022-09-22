@@ -48,6 +48,7 @@ public class DownloadFiles {
         GridFSDownloadOptions downloadOptions = new GridFSDownloadOptions().revision(0);
         try (FileOutputStream streamToDownloadTo = new FileOutputStream(fileName)) {
             gridFSBucket.downloadToStream(fileName, streamToDownloadTo, downloadOptions);
+            streamToDownloadTo.flush();
             System.out.println("The file was downloaded successfully");
             File file = new File(fileName);
             Resource resource = new UrlResource(file.toURI());
