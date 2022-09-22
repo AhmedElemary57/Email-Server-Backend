@@ -146,7 +146,9 @@ public class ServerController {
     }
 
     @GetMapping("/sort")
-    public ResponseEntity<Email[]> sort(@RequestParam String userID, String sortBy, String position){
+    public ResponseEntity<Email[]> sort(@RequestParam String userID,
+                                                      String sortBy,
+                                                      String position){
         System.out.println("sorting for "+ sortBy + " in " + position+ "user "+ userID);
          return new ResponseEntity<>(SortService.sortEmailsBy(userID,sortBy,position), HttpStatus.OK);
     }
@@ -158,12 +160,7 @@ public class ServerController {
 //        return new ResponseEntity<>(server.inbox, HttpStatus.OK);
 //    }
 
-    @PostMapping( "/deleteFromInbox")
-    @ResponseBody
-    public ResponseEntity<Boolean> deleteEmail(@RequestBody Email email) {
-        System.out.println("delete "+ email.get_id());
-        return new ResponseEntity<>(EmailsServices.removeMailFromInbox(email), HttpStatus.OK);
-    }
+
 
 //    @GetMapping("/refresh")
 //    public void refresh(){
@@ -172,9 +169,14 @@ public class ServerController {
 //    }
 
     @DeleteMapping( "/delete")
-    public ResponseEntity<Boolean> deleteEmailFromDB(@RequestParam(value="userID")String userID,@RequestParam(value="emailID") String emailID, @RequestParam(value="position")String position) {
-        System.out.println("We should delete this email from "+position);
-        return new ResponseEntity<>(EmailsServices.removeMailFromDB(userID,emailID, position), HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteEmailFromDB(@RequestParam(value="userID")String userID,
+                                                     @RequestParam(value="emailID") String emailID,
+                                                     @RequestParam(value="position")String position) {
+        System.out.println("We should delete this email from " + position);
+        if(position.equals("inbox") ){
+            return new ResponseEntity<>(EmailsServices.addToTrashAndRemoveFromInbox(userID,emailID), HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(EmailsServices.removeMailFromDB(userID,emailID, position), HttpStatus.OK);
 
     }
 

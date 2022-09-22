@@ -81,15 +81,12 @@ public class EmailsServices {
         }
         return emailsArray;
     }
-    public static Boolean removeMailFromInbox(Email email){
-        String userEmail = email.getReceiver();
-        String emailId = email.get_id();
-        System.out.println(emailId + " " + userEmail);
-        String userID = getUserIDFromDB(userEmail);
+    public static Boolean addToTrashAndRemoveFromInbox(String userID, String emailID){
+        System.out.println(emailID + " " + userID);
         MongoDatabase database = DataBase.connectToDB(userID);
         MongoCollection<Document> collection = database.getCollection("Inbox");
-        System.out.println("To be deleted " + collection.find(new Document("_id", new ObjectId(emailId) )).first());
-        Bson query = eq("_id", new ObjectId(emailId));
+        System.out.println("To be deleted " + collection.find(new Document("_id", new ObjectId(emailID) )).first());
+        Bson query = eq("_id", new ObjectId(emailID));
         try {
             database.getCollection("Trash").insertOne(Objects.requireNonNull(collection.find(query).first()));
             DeleteResult result = collection.deleteOne(query);
