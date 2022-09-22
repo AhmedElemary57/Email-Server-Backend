@@ -66,7 +66,7 @@ public class ServerController {
                                               String attachmentName) throws Exception{
         System.out.println("downloading file");
         String senderID = EmailsServices.getUserIDFromDB(attachmentPosition);
-        return DownloadFiles.downloadFile2(senderID,attachmentName);
+        return DownloadFiles.downloadFile(senderID,attachmentName);
     }
 
 
