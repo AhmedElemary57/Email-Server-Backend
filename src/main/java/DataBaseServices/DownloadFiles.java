@@ -47,12 +47,11 @@ public class DownloadFiles {
         MongoDatabase database = DataBase.connectToDB(senderID);
         GridFSBucket gridFSBucket = GridFSBuckets.create(database);
         GridFSDownloadOptions downloadOptions = new GridFSDownloadOptions().revision(0);
-        try (FileOutputStream streamToDownloadTo = new FileOutputStream(
-                "D:\\Bank System\\" + fileName)) {
+        try (FileOutputStream streamToDownloadTo = new FileOutputStream(fileName)) {
             gridFSBucket.downloadToStream(fileName, streamToDownloadTo, downloadOptions);
             streamToDownloadTo.flush();
             System.out.println("The file was downloaded successfully");
-            File file = new File("D:\\Bank System\\" + fileName);
+            File file = new File(fileName);
             Resource resource = new UrlResource(file.toURI());
 
             return new ResponseEntity<>(resource, HttpStatus.OK);
