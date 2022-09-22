@@ -1,12 +1,10 @@
 package controller;
 
 import DataBaseServices.*;
-import com.mongodb.client.model.Filters;
 import logs.Register;
 import logs.SignIn;
 import model.Email;
 import model.User;
-import org.apache.catalina.webresources.FileResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,11 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @CrossOrigin
 @Controller
@@ -67,10 +62,10 @@ public class ServerController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity<Resource> downloadFiles(@RequestParam String senderEmail,
+    public ResponseEntity<Resource> downloadFiles(@RequestParam String attachmentPosition,
                                               String attachmentName) throws Exception{
         System.out.println("downloading file");
-        String senderID = EmailsServices.getUserIDFromDB(senderEmail);
+        String senderID = EmailsServices.getUserIDFromDB(attachmentPosition);
         return DownloadFiles.downloadFile2(senderID,attachmentName);
     }
 
