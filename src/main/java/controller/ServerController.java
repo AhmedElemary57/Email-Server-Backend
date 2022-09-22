@@ -44,7 +44,7 @@ public class ServerController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public ResponseEntity<String> upload(@RequestParam("files") List<MultipartFile> multipartFiles, @RequestParam("userID") String userID) {
+    public ResponseEntity<Boolean> upload(@RequestParam("files") List<MultipartFile> multipartFiles, @RequestParam("userID") String userID) {
         //upload data to the server
         System.out.println("uploading files" + multipartFiles.size());
         for (MultipartFile multipartFile : multipartFiles) {
@@ -55,7 +55,7 @@ public class ServerController {
                 e.printStackTrace();
             }
         }
-        return new ResponseEntity<>("File Uploaded", HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PostMapping("/send")
