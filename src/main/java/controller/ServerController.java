@@ -173,7 +173,7 @@ public class ServerController {
                                                      @RequestParam(value="emailID") String emailID,
                                                      @RequestParam(value="position")String position) {
         System.out.println("We should delete this email from " + position);
-        if(position.equals("inbox") ){
+        if(position.equals("Inbox") ){
             return new ResponseEntity<>(EmailsServices.addToTrashAndRemoveFromInbox(userID,emailID), HttpStatus.OK);
         }else
             return new ResponseEntity<>(EmailsServices.removeMailFromDB(userID,emailID, position), HttpStatus.OK);
