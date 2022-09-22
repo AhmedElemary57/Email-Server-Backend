@@ -98,8 +98,8 @@ public class ServerController {
         return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "Trash"), HttpStatus.OK);
     }
 
-    @PostMapping("/addToDraft")
-    @ResponseBody
+//    @PostMapping("/addToDraft")
+//    @ResponseBody
 //    public ResponseEntity<ArrayList<Email>>  addToDraft(@RequestBody Email email){
 //        DraftEmail s = new DraftEmail();
 //        s.addToDraft(email);
