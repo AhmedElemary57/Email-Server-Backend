@@ -41,6 +41,7 @@ public class ServerController {
         return signIn.signIn(user);
     }
 
+
     @PostMapping("/upload")
     @ResponseBody
     public ResponseEntity<String> upload(@RequestParam("files") List<MultipartFile> multipartFiles, @RequestParam("userID") String userID) {
@@ -54,26 +55,25 @@ public class ServerController {
                 e.printStackTrace();
             }
         }
-        return new ResponseEntity<>("uploaded successfully", HttpStatus.OK);
+        return new ResponseEntity<>("File Uploaded", HttpStatus.OK);
     }
+
     @PostMapping("/send")
     @ResponseBody
-    public void send(@RequestBody Email email, @RequestParam("userID") String userID){
+    public void send(@RequestBody Email email,@RequestParam("userID") String userID){
         System.out.println("sending email");
         System.out.println("userID: " + userID);
-
         EmailsServices.sendEmail(email, userID);
     }
 
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFiles(@RequestParam String senderEmail,
-                                              String fileName) throws Exception{
-
+                                              String attachmentName) throws Exception{
         System.out.println("downloading file");
         String senderID = EmailsServices.getUserIDFromDB(senderEmail);
-        return DownloadFiles.downloadFile2(senderID,fileName);
-
+        return DownloadFiles.downloadFile2(senderID,attachmentName);
     }
+
 
     @GetMapping("/inbox")
     public ResponseEntity<Email[]> getInbox(@RequestParam String userID){
