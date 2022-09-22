@@ -52,7 +52,7 @@ public class DownloadFiles {
             System.out.println("The file was downloaded successfully");
             File file = new File(fileName);
             Resource resource = new UrlResource(file.toURI());
-            file.delete();
+
             return new ResponseEntity<>(resource, HttpStatus.OK);
 
         } catch (IOException e) {
