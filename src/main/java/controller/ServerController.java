@@ -55,10 +55,10 @@ public class ServerController {
 
     @PostMapping("/send")
     @ResponseBody
-    public void send(@RequestBody Email email,@RequestParam("userID") String userID){
+    public ResponseEntity<Boolean> send(@RequestBody Email email,@RequestParam("userID") String userID){
         System.out.println("sending email");
         System.out.println("userID: " + userID);
-        EmailsServices.sendEmail(email, userID);
+        return EmailsServices.sendEmail(email, userID);
     }
 
     @GetMapping("/download")

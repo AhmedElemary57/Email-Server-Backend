@@ -8,6 +8,8 @@ import model.Email;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +29,7 @@ public class EmailsServices {
         }
         return null;
     }
-    public static void sendEmail(Email email, String senderID) {
+    public static ResponseEntity<Boolean> sendEmail(Email email, String senderID) {
         System.out.println(email.getSender());
         System.out.println(email.getReceiver());
         String receiverID = getUserIDFromDB(email.getReceiver());
@@ -35,7 +37,7 @@ public class EmailsServices {
         System.out.println("The receiver Id is"+receiverID);
         if(senderID == null || receiverID == null){
             System.out.println("Error in sending email to " + email.getReceiver());
-            return;
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         }
         MongoDatabase senderDatabase = DataBase.connectToDB(senderID);
         MongoDatabase receiverDatabase = DataBase.connectToDB(receiverID);
@@ -52,6 +54,7 @@ public class EmailsServices {
         System.out.println("Email sent to " + email.getReceiver());
         senderDatabase.getCollection("Sent").insertOne(document);
         receiverDatabase.getCollection("Inbox").insertOne(document);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     public static Email[] getRequestedEmails(String userID, String CollectionName){
