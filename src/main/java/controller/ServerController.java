@@ -21,7 +21,7 @@ import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @Controller
 public class ServerController {
     SingleTonServer server=SingleTonServer.getInstance();
