@@ -35,7 +35,7 @@ public class EmailsServices {
         String receiverID = getUserIDFromDB(email.getReceiver());
         System.out.println("The sender Id is  "+senderID);
         System.out.println("The receiver Id is"+receiverID);
-        if(senderID == null || receiverID == null){
+        if(senderID == null || receiverID == null || senderID.equals(receiverID)){
             System.out.println("Error in sending email to " + email.getReceiver());
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         }
