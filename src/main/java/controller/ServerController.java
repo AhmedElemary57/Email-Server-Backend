@@ -73,7 +73,7 @@ public class ServerController {
     @GetMapping("/inbox")
     public ResponseEntity<Email[]> getInbox(@RequestParam String userID){
         System.out.println("inbox of "+ userID);
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "Inbox"), HttpStatus.OK);
+        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "inbox"), HttpStatus.OK);
     }
 
     @GetMapping("/sent")
@@ -173,7 +173,7 @@ public class ServerController {
                                                      @RequestParam(value="emailID") String emailID,
                                                      @RequestParam(value="position")String position) {
         System.out.println("We should delete this email from " + position);
-        if(position.equals("Inbox") ){
+        if(position.equals("inbox") ){
             return new ResponseEntity<>(EmailsServices.addToTrashAndRemoveFromInbox(userID,emailID), HttpStatus.OK);
         }else
             return new ResponseEntity<>(EmailsServices.removeMailFromDB(userID,emailID, position), HttpStatus.OK);

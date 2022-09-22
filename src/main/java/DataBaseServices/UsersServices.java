@@ -35,10 +35,10 @@ public class UsersServices {
     }
     public static void createUserCollection(String emailID){
         MongoDatabase database = DataBase.connectToDB(emailID);
-        database.createCollection("Inbox");
-        database.createCollection("Sent");
-        database.createCollection("Trash");
-        database.createCollection("Draft");
-        database.createCollection("Contacts");
+        database.createCollection("inbox");
+        database.createCollection("sent");
+        database.createCollection("trash");
+        database.createCollection("draft");
+        database.createCollection("contacts");
     }
 }

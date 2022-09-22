@@ -52,8 +52,8 @@ public class EmailsServices {
         document.append("seen", email.isSeen());
         document.append("attachments", email.getAttachments());
         System.out.println("Email sent to " + email.getReceiver());
-        senderDatabase.getCollection("Sent").insertOne(document);
-        receiverDatabase.getCollection("Inbox").insertOne(document);
+        senderDatabase.getCollection("sent").insertOne(document);
+        receiverDatabase.getCollection("inbox").insertOne(document);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
@@ -84,11 +84,11 @@ public class EmailsServices {
     public static Boolean addToTrashAndRemoveFromInbox(String userID, String emailID){
         System.out.println(emailID + " " + userID);
         MongoDatabase database = DataBase.connectToDB(userID);
-        MongoCollection<Document> collection = database.getCollection("Inbox");
+        MongoCollection<Document> collection = database.getCollection("inbox");
         System.out.println("To be deleted " + collection.find(new Document("_id", new ObjectId(emailID) )).first());
         Bson query = eq("_id", new ObjectId(emailID));
         try {
-            database.getCollection("Trash").insertOne(Objects.requireNonNull(collection.find(query).first()));
+            database.getCollection("trash").insertOne(Objects.requireNonNull(collection.find(query).first()));
             DeleteResult result = collection.deleteOne(query);
             System.out.println("Deleted document count: " + result.getDeletedCount());
             return true;
@@ -111,7 +111,7 @@ public class EmailsServices {
     public static Boolean markAsSeen(String userID, String emailID){
         System.out.println("The user id is " + userID);
         MongoDatabase database = DataBase.connectToDB(userID);
-        MongoCollection<Document> collection = database.getCollection("Inbox");
+        MongoCollection<Document> collection = database.getCollection("inbox");
         Bson query = eq("_id", new ObjectId(emailID));
         Document document = collection.find(query).first();
         assert document != null;

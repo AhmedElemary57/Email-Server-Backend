@@ -24,7 +24,7 @@ public class DataBase {
 
     public static void main(String[] args) {
         MongoDatabase database = connectToDB("ahmed@gmail.com");
-        database.createCollection("Inbox");
+        database.createCollection("inbox");
 
     }
 
