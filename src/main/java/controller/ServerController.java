@@ -79,7 +79,7 @@ public class ServerController {
     @GetMapping("/sent")
     public ResponseEntity<Email[]> getSent(@RequestParam String userID){
         //TODO : make the front end send the current user email
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "Sent"), HttpStatus.OK);
+        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "sent"), HttpStatus.OK);
     }
     @RequestMapping(value = "/draft", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayList<Email>> getDraft(){
@@ -95,7 +95,7 @@ public class ServerController {
 
     @GetMapping("/trash")
     public ResponseEntity<Email[]> getTrash(@RequestParam String userID){
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "Trash"), HttpStatus.OK);
+        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "trash"), HttpStatus.OK);
     }
 
 //    @PostMapping("/addToDraft")
