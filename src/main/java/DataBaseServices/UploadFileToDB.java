@@ -5,20 +5,10 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSUploadStream;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class UploadFileToDB {
 
-    public static void uploadFile(byte[] data,String userID ,String fileName) throws IOException {
+    public static void uploadFile(byte[] data,String userID ,String fileName){
         MongoDatabase database = DataBase.connectToDB(userID);
         GridFSBucket gridFSBucket = GridFSBuckets.create(database);
         GridFSUploadOptions options = new GridFSUploadOptions();
@@ -31,10 +21,4 @@ public class UploadFileToDB {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Path path = Paths.get("D:\\test.mp4");
-        byte[] data = Files.readAllBytes(path);
-        uploadFile(data,"63266057310bdf79298f3dfe","test.mp4");
-
-    }
 }

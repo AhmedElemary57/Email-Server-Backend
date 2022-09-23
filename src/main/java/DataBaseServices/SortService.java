@@ -17,16 +17,7 @@ public class SortService {
         }
         for (Document document : database.getCollection(position).find().sort(new Document(sortBy, sortType))) {
             System.out.println(document);
-            Email email = new Email();
-            email.set_id(document.get("_id").toString());
-            email.setSender((String) document.get("sender"));
-            email.setReceiver((String) document.get("receiver"));
-            email.setSubject((String) document.get("subject"));
-            email.setBody((String) document.get("content"));
-            email.setDate((String) document.get("date"));
-            email.setPriority((String) document.get("priority"));
-            email.setSeen((boolean) document.get("seen"));
-
+            Email email = EmailsServices.fromDocumentToEmail(document);
             emails.add(email);
         }
         Email[] emailsArray = new Email[emails.size()];

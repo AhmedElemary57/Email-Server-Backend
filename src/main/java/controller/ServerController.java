@@ -7,19 +7,15 @@ import model.Email;
 import model.User;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
 @Controller
 public class ServerController {
-    SingleTonServer server=SingleTonServer.getInstance();
 
     @PostMapping("/register")
     @ResponseBody
@@ -68,7 +64,7 @@ public class ServerController {
 
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFiles(@RequestParam String attachmentPosition,
-                                              String attachmentName) throws Exception{
+                                              String attachmentName) {
         System.out.println("downloading file");
         String senderID = EmailsServices.getUserIDFromDB(attachmentPosition);
         return DownloadFiles.downloadFile(senderID,attachmentName);
@@ -98,55 +94,6 @@ public class ServerController {
         System.out.println("adding to drafts of "+ userID + " email = " + email.get_id());
         return EmailsServices.addToDrafts(userID,email);
     }
-
-//    @RequestMapping(value = "/contacts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<ArrayList<ContactUser>> getContacts(){
-//        server  = SingleTonServer.getInstance();
-//        return new ResponseEntity<>(server.contacts, HttpStatus.OK);
-//    }
-
-
-
-//    @PostMapping("/addToDraft")
-//    @ResponseBody
-//    public ResponseEntity<ArrayList<Email>>  addToDraft(@RequestBody Email email){
-//        DraftEmail s = new DraftEmail();
-//        s.addToDraft(email);
-//        return new ResponseEntity<>(server.draft, HttpStatus.OK);
-//    }
-
-//    @PostMapping("/sendDraft")
-//    @ResponseBody
-//    public void sendDraft(@RequestBody Email email){
-//        Delete d = new Delete();
-//        d.deleteEmail(email,"draft");
-//        send(email);
-//    }
-
-//    @PostMapping("/editDraft")
-//    @ResponseBody
-//    public ResponseEntity<ArrayList<Email>> editDraft(@RequestParam("twoDrafts") List<Email> twoDrafts) {
-//        DraftEmail draftEmail = new DraftEmail();
-//        draftEmail.editDraft(twoDrafts.get(0), twoDrafts.get(1));
-//        return new ResponseEntity<>(server.draft, HttpStatus.OK);
-//    }
-
-//    @PostMapping("/addContact")
-//    @ResponseBody
-//    public void addContact(@RequestBody ArrayList<ContactUser> newContact){
-//        server.contacts = newContact;
-//    }
-//
-//    @PostMapping( "/deleteContact")
-//    public void deleteContact(@RequestBody ArrayList<ContactUser> newContact) {
-//        server.contacts = newContact;
-//    }
-//
-//    @PostMapping("/editContact")
-//    @ResponseBody
-//    public void editContact(@RequestBody ArrayList<ContactUser> newContacts) {
-//        server.contacts = newContacts;
-//    }
 
     @GetMapping("/search")
     public ResponseEntity<Email[]> search(@RequestParam String userID, String searchString, String searchPosition){

@@ -1,20 +1,15 @@
 package DataBaseServices;
 
-import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.result.DeleteResult;
 import model.Email;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -48,24 +43,14 @@ public class EmailsServices {
         MongoCollection<Document> collection = database.getCollection(collectionName);
         collection.deleteOne(eq("_id", new ObjectId(emailID)));
     }
-    public static void updateEmailInCollection(String userID, String collectionName, Email email){
-        MongoDatabase database = DataBase.connectToDB(userID);
-        MongoCollection<Document> collection = database.getCollection(collectionName);
-        Document document = new Document();
-        document.append("sender", email.getSender());
-        document.append("receiver", email.getReceiver());
-        document.append("subject", email.getSubject());
-        document.append("content", email.getBody());
-        document.append("date", email.getDate());
-        document.append("priority", email.getPriority());
-        document.append("seen", email.isSeen());
-        document.append("attachments", email.getAttachments());
-        collection.updateOne(eq("_id", new ObjectId(email.get_id())), new Document("$set", document));
-    }
     public static Email getEmailFromCollection(String userID, String collectionName, String emailID){
         MongoDatabase database = DataBase.connectToDB(userID);
         MongoCollection<Document> collection = database.getCollection(collectionName);
         Document document = collection.find(eq("_id", new ObjectId(emailID))).first();
+        assert document != null;
+        return fromDocumentToEmail(document);
+    }
+    public static Email fromDocumentToEmail(Document document){
         Email email = new Email();
         email.set_id(document.get("_id").toString());
         email.setSender((String) document.get("sender"));
@@ -97,16 +82,7 @@ public class EmailsServices {
         ArrayList<Email> emails = new ArrayList<>();
         for (Document document : database.getCollection(CollectionName).find().sort(new Document("date", -1))) {
             System.out.println(document);
-            Email email = new Email();
-            email.set_id(document.get("_id").toString());
-            email.setSender((String) document.get("sender"));
-            email.setReceiver((String) document.get("receiver"));
-            email.setSubject((String) document.get("subject"));
-            email.setBody((String) document.get("content"));
-            email.setDate((String) document.get("date"));
-            email.setPriority((String) document.get("priority"));
-            email.setSeen((boolean) document.get("seen"));
-            email.setAttachments((List<String>) document.get("attachments"));
+            Email email = fromDocumentToEmail(document);
             emails.add(email);
         }
         Email[] emailsArray = new Email[emails.size()];
