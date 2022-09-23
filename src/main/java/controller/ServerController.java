@@ -60,6 +60,11 @@ public class ServerController {
         System.out.println("userID: " + userID);
         return EmailsServices.sendEmail(email, userID);
     }
+    @DeleteMapping("/undoRemoveFromInbox")
+    public ResponseEntity<Boolean> undoRemoveFromInbox(@RequestParam String emailID, String userID){
+        System.out.println("undo remove from inbox emailID = " +emailID + " userID = " + userID);
+        return EmailsServices.undoRemoveFromInbox(emailID,userID);
+    }
 
     @GetMapping("/download")
     public ResponseEntity<Resource> downloadFiles(@RequestParam String attachmentPosition,
@@ -78,7 +83,6 @@ public class ServerController {
 
     @GetMapping("/sent")
     public ResponseEntity<Email[]> getSent(@RequestParam String userID){
-        //TODO : make the front end send the current user email
         return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "sent"), HttpStatus.OK);
     }
     @RequestMapping(value = "/draft", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

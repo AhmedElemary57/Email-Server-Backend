@@ -120,4 +120,15 @@ public class EmailsServices {
         return true;
     }
 
+    public static  ResponseEntity<Boolean> undoRemoveFromInbox(String emailID, String userID){
+        MongoDatabase database = DataBase.connectToDB(userID);
+        MongoCollection<Document> collection = database.getCollection("trash");
+        Bson query = eq("_id", new ObjectId(emailID));
+        Document document = collection.find(query).first();
+        System.out.println(document);
+        assert document != null;
+        database.getCollection("inbox").insertOne(document);
+        collection.deleteOne(query);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 }
