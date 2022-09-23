@@ -151,7 +151,7 @@ public class EmailsServices {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
     public static ResponseEntity<Boolean> addToDrafts(String userID, Email email){
-        addEmailToCollection(userID, "drafts", email);
+        addEmailToCollection(userID, "draft", email);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
