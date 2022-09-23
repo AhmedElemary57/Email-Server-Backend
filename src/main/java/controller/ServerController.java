@@ -78,17 +78,25 @@ public class ServerController {
     @GetMapping("/inbox")
     public ResponseEntity<Email[]> getInbox(@RequestParam String userID){
         System.out.println("inbox of "+ userID);
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "inbox"), HttpStatus.OK);
+        return EmailsServices.getRequestedEmails(userID, "inbox");
     }
 
     @GetMapping("/sent")
     public ResponseEntity<Email[]> getSent(@RequestParam String userID){
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "sent"), HttpStatus.OK);
+        return EmailsServices.getRequestedEmails(userID, "sent");
     }
-    @RequestMapping(value = "/draft", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ArrayList<Email>> getDraft(){
-        server  = SingleTonServer.getInstance();
-        return new ResponseEntity<>(server.draft, HttpStatus.OK);
+    @GetMapping("/trash")
+    public ResponseEntity<Email[]> getTrash(@RequestParam String userID){
+        return EmailsServices.getRequestedEmails(userID, "trash");
+    }
+    @GetMapping("/draft")
+    public ResponseEntity<Email[]> getDraft(@RequestParam String userID){
+        return EmailsServices.getRequestedEmails(userID, "draft");
+    }
+    @PostMapping("/addToDrafts")
+    public ResponseEntity<Boolean> addToDrafts(@RequestBody Email email, @RequestParam String userID){
+        System.out.println("adding to drafts of "+ userID + " email = " + email.get_id());
+        return EmailsServices.addToDrafts(userID,email);
     }
 
 //    @RequestMapping(value = "/contacts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -97,10 +105,7 @@ public class ServerController {
 //        return new ResponseEntity<>(server.contacts, HttpStatus.OK);
 //    }
 
-    @GetMapping("/trash")
-    public ResponseEntity<Email[]> getTrash(@RequestParam String userID){
-        return new ResponseEntity<>(EmailsServices.getRequestedEmails(userID, "trash"), HttpStatus.OK);
-    }
+
 
 //    @PostMapping("/addToDraft")
 //    @ResponseBody
@@ -156,22 +161,6 @@ public class ServerController {
         System.out.println("sorting for "+ sortBy + " in " + position+ "user "+ userID);
          return new ResponseEntity<>(SortService.sortEmailsBy(userID,sortBy,position), HttpStatus.OK);
     }
-
-//    @PostMapping("/priority")
-//    @ResponseBody
-//    public ResponseEntity<ArrayList<Email>> priority(@RequestBody ArrayList<Email> emails) {
-//        server.inbox=emails;
-//        return new ResponseEntity<>(server.inbox, HttpStatus.OK);
-//    }
-
-
-
-//    @GetMapping("/refresh")
-//    public void refresh(){
-//        LogOut logOut = new LogOut();
-//        logOut.refresh();
-//    }
-
     @DeleteMapping( "/delete")
     public ResponseEntity<Boolean> deleteEmailFromDB(@RequestParam(value="userID")String userID,
                                                      @RequestParam(value="emailID") String emailID,
@@ -181,18 +170,13 @@ public class ServerController {
             return new ResponseEntity<>(EmailsServices.addToTrashAndRemoveFromInbox(userID,emailID), HttpStatus.OK);
         }else
             return new ResponseEntity<>(EmailsServices.removeMailFromDB(userID,emailID, position), HttpStatus.OK);
-
     }
+
 
     @DeleteMapping( "/markAsSeen")
     public  ResponseEntity<Boolean> markAsSeen(@RequestParam(value="userID") String userID,@RequestParam(value="emailID") String emailID ) {
         System.out.println("mark as seen "+ emailID + " user email is " + userID);
         return new ResponseEntity<>(EmailsServices.markAsSeen(userID,emailID), HttpStatus.OK);
     }
-//
-//    @GetMapping("/logOut")
-//    public void logOut() {
-//        LogOut logOut = new LogOut();
-//        logOut.save();
-//    }
+
 }
